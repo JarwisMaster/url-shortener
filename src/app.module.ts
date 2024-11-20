@@ -6,6 +6,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { loggerConfig } from './ops/logger.config';
 import { DBService } from './db.service';
 import { environmentValidationSchema } from './ops/environmen.validation-schema';
+import { UrlRepository } from './url.repository';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { environmentValidationSchema } from './ops/environmen.validation-schema'
     LoggerModule.forRootAsync(loggerConfig)
   ],
   controllers: [AppController],
-  providers: [AppService, DBService],
+  providers: [AppService, DBService, UrlRepository],
 })
-export class AppModule {}
+export class AppModule { }

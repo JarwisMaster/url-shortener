@@ -36,8 +36,8 @@ export class DBService {
         try {
         await this.client`
             CREATE TABLE IF NOT EXISTS urls (
-                id VARCHAR(10) PRIMARY KEY,
-                original_url TEXT NOT NULL
+                short VARCHAR(16) PRIMARY KEY,
+                original TEXT NOT NULL
             );
         `
         } catch (e) {
