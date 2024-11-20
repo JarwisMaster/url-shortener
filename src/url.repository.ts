@@ -20,19 +20,20 @@ export class UrlRepository {
     constructor(private readonly dbService: DBService) { }
 
     async getOne(short: string) {
-
+        let url: Url
         try {
             // @TODO not safe
             const result = await this.dbService.client`SELECT * FROM urls WHERE short = ${short} limit 1;`
-            if (result) {
-                return new Url(result[0]?.original, result[0]?.short)
-            } else {
-                throw new NotFoundException('URL Not Found')
+            if (result[0]) {
+                url = new Url(result[0]?.original, result[0]?.short)
             }
         } catch (e) {
             this.logger.error(e)
-            throw new BadRequestException('Short grab error.')
+            throw new NotFoundException('Grab url error.')
         }
+        if (!url)
+            throw new NotFoundException('URL Not Found.')
+        return url
     }
 
     async saveOne(url: Url) {
