@@ -8,11 +8,14 @@ import { DBService } from './db.service';
 import { environmentValidationSchema } from './ops/environmen.validation-schema';
 import { UrlRepository } from './url.repository';
 import { redisStore } from 'cache-manager-redis-yet';
-import { CacheModule, CacheModuleOptions } from "@nestjs/cache-manager";
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, validationSchema: environmentValidationSchema }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: environmentValidationSchema,
+    }),
     LoggerModule.forRootAsync(loggerConfig),
     CacheModule.registerAsync({
       isGlobal: true,
@@ -20,8 +23,8 @@ import { CacheModule, CacheModuleOptions } from "@nestjs/cache-manager";
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const storeConfig = {
-          url: `redis://localhost:6379`,
-          ttl: 60 * 60 * 24
+          url: `redis://${configService.get('REDIS_HOST')}:${configService.get('REDIS_PORT')}`,
+          ttl: 60 * 60 * 24,
         };
         const store = await redisStore(storeConfig);
         return { store: () => store };
@@ -31,4 +34,4 @@ import { CacheModule, CacheModuleOptions } from "@nestjs/cache-manager";
   controllers: [AppController],
   providers: [AppService, DBService, UrlRepository],
 })
-export class AppModule { }
+export class AppModule {}
