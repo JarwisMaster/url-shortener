@@ -7,16 +7,13 @@ import {
   Param,
   Post,
   Res,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { IsString, ValidateIf } from 'class-validator';
+import { ValidateIf } from 'class-validator';
 import {
   Cache,
   CACHE_MANAGER,
-  CacheInterceptor,
-  CacheKey,
 } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 
